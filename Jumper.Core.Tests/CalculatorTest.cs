@@ -93,5 +93,23 @@ namespace Jumper.Core.Tests
             yield return new TestCaseData(new List<int> { 3, 1, 1, 2, 1, 1, 6 }, new Dictionary<int, int> { { 6, 6 }, { 5, 1 }, { 4, 1 }, { 3, 1 }, { 2, 1 }, { 1, 1 }, { 0, 1 } }, new List<int> { 0, 3, 5, 6 });
 
         }
+
+        [Test]
+        [TestCaseSource("GetShortestPathChainTestData")]
+        public void GetShortestPathChain(List<int> data, List<int> expected)
+        {
+            var actual = this.Calculator.GetShortestPath(data);
+            Assert.AreEqual(actual, expected);
+        }
+        public static IEnumerable<TestCaseData> GetShortestPathChainTestData()
+        {
+            yield return new TestCaseData(new List<int> { 0 }, new List<int> { 0 });
+            yield return new TestCaseData(new List<int> { 1, 2, 0, 1, 0, 2, 0 }, null);
+            yield return new TestCaseData(new List<int> { 1, 2, 0, -1, 0, 2, 0 }, null);
+            yield return new TestCaseData(new List<int> { 1, 2, 1, -1, 0, 2, 0 }, null);
+            yield return new TestCaseData(new List<int> { 6, 1, 1, 1, 1, 1, 6 }, new List<int> { 0, 6 });
+            yield return new TestCaseData(new List<int> { 3, 1, 1, 2, 1, 1, 6 }, new List<int> { 0, 3, 5, 6 });
+
+        }
     }
 }

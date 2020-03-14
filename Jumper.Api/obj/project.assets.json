@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "Jumper.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Jumper.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Jumper.Core.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Jumper.Core/1.0.0": {
+      "type": "project",
+      "path": "../Jumper.Core/Jumper.Core.csproj",
+      "msbuildProject": "../Jumper.Core/Jumper.Core.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "Jumper.Core >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Matas\\.nuget\\packages\\": {}
@@ -32,7 +51,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Matas\\source\\repos\\Jumper\\Jumper.Core\\Jumper.Core.csproj": {
+              "projectPath": "C:\\Users\\Matas\\source\\repos\\Jumper\\Jumper.Core\\Jumper.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

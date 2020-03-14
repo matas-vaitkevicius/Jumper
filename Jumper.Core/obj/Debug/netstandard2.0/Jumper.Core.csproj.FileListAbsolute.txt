@@ -1,0 +1,8 @@
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\bin\Debug\netstandard2.0\Jumper.Core.deps.json
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\bin\Debug\netstandard2.0\Jumper.Core.dll
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\bin\Debug\netstandard2.0\Jumper.Core.pdb
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\obj\Debug\netstandard2.0\Jumper.Core.csprojAssemblyReference.cache
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\obj\Debug\netstandard2.0\Jumper.Core.AssemblyInfoInputs.cache
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\obj\Debug\netstandard2.0\Jumper.Core.AssemblyInfo.cs
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\obj\Debug\netstandard2.0\Jumper.Core.dll
+C:\Users\Matas\source\repos\Jumper\Jumper.Core\obj\Debug\netstandard2.0\Jumper.Core.pdb

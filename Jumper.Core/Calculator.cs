@@ -57,7 +57,12 @@ namespace Jumper.Core
             return null;
         }
 
-        public object GetShortestPath(List<int> data, Dictionary<int, int> longestPath)
+        public List<int> GetShortestPath(List<int> data) {
+            var longestPath = GetLongestPath(data);
+            return longestPath == null ? null : GetShortestPath(data, longestPath);
+        }
+
+        public List<int> GetShortestPath(List<int> data, Dictionary<int, int> longestPath)
         {
             var currentElement = 0;
             var shortestPath = new List<int> { currentElement };
