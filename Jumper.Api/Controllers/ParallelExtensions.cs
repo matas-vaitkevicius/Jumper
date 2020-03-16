@@ -8,7 +8,7 @@ namespace Jumper.Api.Controllers
 {
     public static class ParallelExtensions
     {
-        public static IEnumerable<T1> OrderedParallel<T, T1>(this List<T> list, Func<T, T1> action)
+        public static IEnumerable<T1> OrderedParallel<T, T1>(this IEnumerable<T> list, Func<T, T1> action)
         {
             var unorderedResult = new ConcurrentBag<(long, T1)>();
             Parallel.ForEach(list, (o, state, i) =>

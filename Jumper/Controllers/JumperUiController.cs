@@ -9,16 +9,16 @@ namespace Jumper.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class JumperUiController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<JumperUiController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public JumperUiController(ILogger<JumperUiController> logger)
         {
             _logger = logger;
         }
