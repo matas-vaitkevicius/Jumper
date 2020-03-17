@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-window.ListToJump = []
+window.ListToJump = [];
+window.ListsInBatch = [];
+window.ListsForDisplay = [];
 export class Home extends Component {
     static displayName = Home.name;
 
+    
+
     dialButtonClick(e) {
         e.preventDefault()
-        
+
         var listToJumpElement = document.getElementById('listToJump');
-        debugger;
+  //      debugger;
         console.log(e);
         var val = e.target.innerText;
         var digit = parseInt(val);
@@ -15,29 +19,45 @@ export class Home extends Component {
             if (val === "Delete") {
                 window.ListToJump.pop()
             }
-            else
-            {
-                fetch("https://localhost:44330/jumper", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
+            else {
+                if (window.ListToJump.length > 0) {
+                    window.ListsInBatch.push(window.ListToJump);
+                }
+                window.ListToJump = [];
+             if (val === "Add to Batch") {
 
-                    body: JSON.parse(JSON.stringify("[[" + window.ListToJump.toString() + "]]"))
+                    document.getElementById('listsInBatch').innerHTML = JSON.stringify(window.ListsInBatch);
+                }
+                else {
+                    var solution = [];
+                 if (localStorage.getItem(window.ListsInBatch)) {
+                        solution = localStorage.getItem(window.ListsInBatch);
+                    } else {
+                        fetch("https://localhost:44330/jumper", {
+                            method: "POST",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
 
-                })
-                    .then(res => {
-                        //debugger;
-                        return res.json();
-                    })
-                    .then(
-                        (result) => {
-                            console.log(result);
-                        });
+                            body: JSON.stringify(window.ListsInBatch)
+                        })
+                            .then(res => {
+                                //debugger;
+                                return res.json();
+                            })
+                            .then(
+                                (result) => {
+                                    solution = result;
+                                    localStorage.setItem(window.ListsInBatch, solution);
+                                    console.log(result);
+                                    window.ListsForDisplay = window.ListsInBatch.map((o, i) => { return { 'original': o, 'result': result[i] }; });
+                                    window.ListsInBatch = [];
+                                });
+                    }
+                }
             }
-        } else
-        {
+        } else {
             window.ListToJump.push(digit);
         }
         listToJumpElement.value = window.ListToJump.toString();
@@ -45,8 +65,10 @@ export class Home extends Component {
     render() {
     return (
       <div>
-            <h1>Hello, world!</h1>
-            <div className="result"></div>
+            <h1>You need to point fetch API to correct port</h1>
+            <div id="result"></div>
+            <div>Lists ready for batch processing</div>
+            <div id="listsInBatch"></div>
             <input type="text" className="input" id="listToJump"></input>
             <div className="buttonPad">
                 <div className="dialButton" onClick={e => this.dialButtonClick(e)}>1</div>
@@ -61,6 +83,7 @@ export class Home extends Component {
                 <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Send</div>
                 <div className="dialButton" onClick={e => this.dialButtonClick(e)}>0</div>
                 <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Delete</div>
+                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
             </div>
             
         </div>
