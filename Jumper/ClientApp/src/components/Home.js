@@ -4,11 +4,12 @@ window.ListToJump = [];
 window.ListsInBatch = [];
 window.ListsForDisplay = [];
 
-
 export class Home extends Component {
     static displayName = Home.name;
 
-    displayResult() {
+    displayResult(solution) {
+        window.ListsForDisplay = window.ListsInBatch.map((o, i) => { return { 'original': o, 'result': solution[i] }; });
+        window.ListsInBatch = [];
         var resultElement = document.getElementById('result');
         ReactDOM.unmountComponentAtNode(resultElement);
         ReactDOM.render(<AllResults results={window.ListsForDisplay} />, resultElement);
@@ -34,8 +35,9 @@ export class Home extends Component {
                 }
                 else {
                     var solution = [];
-                    if (localStorage.getItem(window.ListsInBatch)) {
-                        solution = localStorage.getItem(window.ListsInBatch);
+                    if (localStorage.getItem(JSON.stringify(window.ListsInBatch))) {
+                        solution = JSON.parse(localStorage.getItem(JSON.stringify(window.ListsInBatch)));
+                        this.displayResult(solution);
                     } else {
                         fetch("https://localhost:44330/jumper", {
                             method: "POST",
@@ -47,16 +49,15 @@ export class Home extends Component {
                         })
                             .then(res => {
                                 return res.json();
+                            }).catch((error) => {
+                                console.log(error);
+                                document.getElementsByTagName('h1')[0].style.color = "#FF0000";
                             })
                             .then(
                                 (result) => {
                                     solution = result;
-                                    localStorage.setItem(window.ListsInBatch, solution);
-                                    console.log(result);
-                                    window.ListsForDisplay = window.ListsInBatch.map((o, i) => { return { 'original': o, 'result': result[i] }; });
-                                    window.ListsInBatch = [];
-
-                                    this.displayResult();
+                                    localStorage.setItem(JSON.stringify(window.ListsInBatch), JSON.stringify(solution));
+                                    this.displayResult(solution);
                                 });
                     }
                 }
@@ -69,7 +70,7 @@ export class Home extends Component {
     render() {
         return (
             <div>
-                <h1>You need to point fetch API to correct port</h1>
+                <h1>You need to point fetch API to correct port (in Home.js)</h1>
                 <div id="result"></div>
                 <div>Lists ready for batch processing</div>
                 <div id="listsInBatch"></div>
@@ -87,7 +88,7 @@ export class Home extends Component {
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Send</div>
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>0</div>
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Delete</div>
-                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
+                    <div onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
                 </div>
 
             </div>
@@ -98,11 +99,10 @@ export class Home extends Component {
 class AllResults extends Component {
     render() {
         return (<div>
-            {this.props.results.map(o => { return (<BoldedLine lineData={o} />); })}
+            {this.props.results.map(o => { return (o.result === null ? ("Non traversable") : (<BoldedLine lineData={o} />)); })}
             </div>)
     };
 }
-
 
 class BoldedLine extends Component {
     render() {

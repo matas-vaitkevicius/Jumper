@@ -12,3 +12,12 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.dialButton {
+    width: 30%;
+    display: inline-block;
+}
+.buttonPad {
+    width: 20%;
+    display: table;
+}
