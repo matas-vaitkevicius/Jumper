@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 window.ListToJump = [];
 window.ListsInBatch = [];
 window.ListsForDisplay = [];
+
+
 export class Home extends Component {
     static displayName = Home.name;
 
-    
+    displayResult() {
+        var resultElement = document.getElementById('result');
+        ReactDOM.unmountComponentAtNode(resultElement);
+        ReactDOM.render(<AllResults results={window.ListsForDisplay} />, resultElement);
+    };
 
     dialButtonClick(e) {
-        e.preventDefault()
-
+        e.preventDefault();
         var listToJumpElement = document.getElementById('listToJump');
-  //      debugger;
         console.log(e);
         var val = e.target.innerText;
         var digit = parseInt(val);
@@ -24,13 +29,12 @@ export class Home extends Component {
                     window.ListsInBatch.push(window.ListToJump);
                 }
                 window.ListToJump = [];
-             if (val === "Add to Batch") {
-
+                if (val === "Add to Batch") {
                     document.getElementById('listsInBatch').innerHTML = JSON.stringify(window.ListsInBatch);
                 }
                 else {
                     var solution = [];
-                 if (localStorage.getItem(window.ListsInBatch)) {
+                    if (localStorage.getItem(window.ListsInBatch)) {
                         solution = localStorage.getItem(window.ListsInBatch);
                     } else {
                         fetch("https://localhost:44330/jumper", {
@@ -39,11 +43,9 @@ export class Home extends Component {
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json'
                             },
-
                             body: JSON.stringify(window.ListsInBatch)
                         })
                             .then(res => {
-                                //debugger;
                                 return res.json();
                             })
                             .then(
@@ -53,6 +55,8 @@ export class Home extends Component {
                                     console.log(result);
                                     window.ListsForDisplay = window.ListsInBatch.map((o, i) => { return { 'original': o, 'result': result[i] }; });
                                     window.ListsInBatch = [];
+
+                                    this.displayResult();
                                 });
                     }
                 }
@@ -63,30 +67,55 @@ export class Home extends Component {
         listToJumpElement.value = window.ListToJump.toString();
     }
     render() {
-    return (
-      <div>
-            <h1>You need to point fetch API to correct port</h1>
-            <div id="result"></div>
-            <div>Lists ready for batch processing</div>
-            <div id="listsInBatch"></div>
-            <input type="text" className="input" id="listToJump"></input>
-            <div className="buttonPad">
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>1</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>2</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>3</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>4</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>5</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>6</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>7</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>8</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>9</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Send</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>0</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Delete</div>
-                <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
+        return (
+            <div>
+                <h1>You need to point fetch API to correct port</h1>
+                <div id="result"></div>
+                <div>Lists ready for batch processing</div>
+                <div id="listsInBatch"></div>
+                <input type="text" className="input" id="listToJump"></input>
+                <div className="buttonPad">
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>1</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>2</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>3</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>4</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>5</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>6</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>7</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>8</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>9</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Send</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>0</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Delete</div>
+                    <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
+                </div>
+
             </div>
-            
-        </div>
-    );
-  }
+        );
+    }
 }
+
+class AllResults extends Component {
+    render() {
+        return (<div>
+            {this.props.results.map(o => { return (<BoldedLine lineData={o} />); })}
+            </div>)
+    };
+}
+
+
+class BoldedLine extends Component {
+    render() {
+        return (<div>
+            {this.props.lineData.original.map((o, i) => {
+                if (this.props.lineData.result.indexOf(i) > -1) {
+                    return (<span><b>{o}</b></span>);
+                }
+                else {
+                    return (<span>{o}</span>);
+                }
+            })}
+        </div>);
+    };
+}
+
