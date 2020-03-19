@@ -12,11 +12,18 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
+.dialButton-last.dialButton {
+    width: 100%
+}
 .dialButton {
     width: 30%;
     display: inline-block;
+    border-radius: 11px;
+    border-style: solid;
+    border-width: 1px;
+    text-align: center;
 }
+
 .buttonPad {
     width: 20%;
     display: table;

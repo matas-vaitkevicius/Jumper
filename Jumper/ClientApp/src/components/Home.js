@@ -31,7 +31,10 @@ export class Home extends Component {
                 }
                 window.ListToJump = [];
                 if (val === "Add to Batch") {
-                    document.getElementById('listsInBatch').innerHTML = JSON.stringify(window.ListsInBatch);
+                    debugger;
+                    var listsInBatchContainer = document.getElementById('ListsInBatchContainer');
+                    ReactDOM.unmountComponentAtNode(listsInBatchContainer)
+                    ReactDOM.render(<ListsInBatch lists={window.ListsInBatch} />, listsInBatchContainer);
                 }
                 else {
                     var solution = [];
@@ -72,9 +75,11 @@ export class Home extends Component {
             <div>
                 <h1>You need to point fetch API to correct port (in Home.js)</h1>
                 <div id="result"></div>
-                <div>Lists ready for batch processing</div>
-                <div id="listsInBatch"></div>
-                <input type="text" className="input" id="listToJump"></input>
+                <div id="ListsInBatchContainer">
+                    <ListsInBatch lists={window.ListsInBatch} />
+                </div>
+                <ListToJump value={window.ListToJump} />
+
                 <div className="buttonPad">
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>1</div>
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>2</div>
@@ -88,12 +93,36 @@ export class Home extends Component {
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Send</div>
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>0</div>
                     <div className="dialButton" onClick={e => this.dialButtonClick(e)}>Delete</div>
-                    <div onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
+                    <div className="dialButton dialButton-last" onClick={e => this.dialButtonClick(e)}>Add to Batch</div>
                 </div>
 
             </div>
         );
     }
+}
+
+class ListsInBatch extends Component {
+    constructor(props) {
+        super(props);
+        this.state = this.props.lists
+    };
+
+    render() {
+        return (
+            <div>
+                <div style={{ display: this.state.length > 0 ? "block" : "none" }}>
+                    Lists ready for batch processing
+        </div>
+                <div id="listsInBatch">{JSON.stringify(this.state)}</div>
+            </div >
+        )
+    };
+}
+
+class ListToJump extends Component {
+    render() {
+        return (<input type="text" className="input" id="listToJump" ></input>);
+    };
 }
 
 class AllResults extends Component {
